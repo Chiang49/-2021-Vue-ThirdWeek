@@ -101,12 +101,12 @@
                       <img class="img-fluid" :src="temProduct.data.imageUrl" :alt="temProduct.data.title">
                     </div>
                     <div>
-                      <button class="btn btn-outline-primary btn-sm d-block w-100">
+                      <button class="btn btn-outline-primary btn-sm d-block w-100" @click="updataPhoto">
                         新增圖片
                       </button>
                     </div>
                     <div>
-                      <button class="btn btn-outline-danger btn-sm d-block w-100">
+                      <button class="btn btn-outline-danger btn-sm d-block w-100" @click="deletePhoto">
                         刪除圖片
                       </button>
                     </div>

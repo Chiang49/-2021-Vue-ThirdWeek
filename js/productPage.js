@@ -10,6 +10,7 @@ const productPage = Vue.createApp({
             products:[],
             is_New: true,
             temProduct:{
+                imagesUrlNum: 0,
                 data:{
                     imagesUrl: []
                 }
@@ -23,9 +24,9 @@ const productPage = Vue.createApp({
         signOut(){
             axios.post(`${url}logout`)
             .then((res) => {
-                // console.log(res);
+                console.log(res);
                 if(res.data.success){
-                    document.cookie = `sixToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+                    document.cookie = `sixToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/-2021-Vue-ThirdWeek;`;
                     alert(res.data.message);
                     window.location = "index.html";
                 }else{
@@ -59,6 +60,7 @@ const productPage = Vue.createApp({
                 if(res.data.success){
                     alert("產品刪除成功");
                     delProductModal.hide();
+                    this.temProduct.data = {};
                     this.getProductData();
                 }else{
                     alert(res.data.message);
@@ -74,12 +76,12 @@ const productPage = Vue.createApp({
 
             axios.post(`${url}api/${path}/admin/product`,this.temProduct)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 if(res.data.success){
                     alert("產品新增成功");
                     this.getProductData();
-                    productModal.hide();
                     this.temProduct.data = {};
+                    productModal.hide();
                 }else{
                     alert(res.data.message);
                 }
@@ -95,7 +97,7 @@ const productPage = Vue.createApp({
             
             axios.put(`${url}api/${path}/admin/product/${id}`,this.temProduct)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 if(res.data.success){
                     alert(res.data.message);
                     this.getProductData();
@@ -109,6 +111,40 @@ const productPage = Vue.createApp({
                 console.log(err);
             })
 
+        },
+
+        //上傳圖片
+        updataPhoto(){
+            
+            if(this.temProduct.imagesUrlNum === 0){
+                this.temProduct.data.imagesUrl = [];
+                this.temProduct.data.imagesUrl.push(this.temProduct.data.imageUrl);
+                this.temProduct.imagesUrlNum = this.temProduct.data.imagesUrl.length;
+            }else{
+                this.temProduct.data.imagesUrl.push(this.temProduct.data.imageUrl);
+                this.temProduct.imagesUrlNum = this.temProduct.data.imagesUrl.length;
+            }
+
+            if(this.temProduct.imagesUrlNum === this.temProduct.data.imagesUrl.length){
+                alert("圖片新增成功");
+            }
+    
+        },
+
+        //刪除圖片
+        deletePhoto(){
+
+            if(this.temProduct.imagesUrlNum === 0){
+                alert("目前沒有圖片");
+            }else{
+                this.temProduct.data.imageUrl = "";
+                this.temProduct.data.imagesUrl = [];
+                this.temProduct.imagesUrlNum = 0;
+                if(this.temProduct.imagesUrlNum === this.temProduct.data.imagesUrl.length){
+                    alert("圖片刪除成功");
+                }
+            }
+        
         },
 
         //送出資料判斷
@@ -127,6 +163,7 @@ const productPage = Vue.createApp({
 
             if(status === 'isNew'){
                 productModal.show();
+                this.is_New = true;
             }else if(status === 'edit'){
                 this.temProduct.data = {...item};
                 this.is_New = false;
@@ -137,8 +174,6 @@ const productPage = Vue.createApp({
             }
             
         }
-
-
     },
 
     mounted(){
@@ -156,7 +191,7 @@ const productPage = Vue.createApp({
                 this.getProductData();
             }else{
                 alert("已被登出");
-                document.cookie = `sixToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+                document.cookie = `sixToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/-2021-Vue-ThirdWeek;`;
                 window.location="index.html";
             }
         })
