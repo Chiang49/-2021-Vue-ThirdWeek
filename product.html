@@ -86,7 +86,8 @@
             <div class="modal-content border-0">
               <div class="modal-header bg-dark text-white">
                 <h5 id="productModalLabel" class="modal-title">
-                  <span>新增產品</span>
+                  <span v-if="is_New">新增產品</span>
+                  <span v-else>編輯產品</span>
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
@@ -96,17 +97,17 @@
                     <div class="mb-1">
                       <div class="form-group">
                         <label for="imageUrl">輸入圖片網址</label>
-                        <input type="text" class="form-control" placeholder="請輸入圖片連結" v-model="temProduct.data.imageUrl">
+                        <input type="text" id="imageUrl" class="form-control" placeholder="請輸入圖片連結" v-model="temProduct.data.imageUrl">
                       </div>
                       <img class="img-fluid" :src="temProduct.data.imageUrl" :alt="temProduct.data.title">
                     </div>
                     <div>
-                      <button class="btn btn-outline-primary btn-sm d-block w-100" @click="updataPhoto">
+                      <button class="btn btn-outline-primary btn-sm d-block w-100" @click.prevent="updataPhoto">
                         新增圖片
                       </button>
                     </div>
                     <div>
-                      <button class="btn btn-outline-danger btn-sm d-block w-100" @click="deletePhoto">
+                      <button class="btn btn-outline-danger btn-sm d-block w-100" @click.prevent="deletePhoto">
                         刪除圖片
                       </button>
                     </div>
@@ -123,7 +124,7 @@
                         <input id="category" type="text" class="form-control" placeholder="請輸入分類" v-model="temProduct.data.category">
                       </div>
                       <div class="form-group col-md-6">
-                        <label for="price">單位</label>
+                        <label for="unit">單位</label>
                         <input id="unit" type="text" class="form-control" placeholder="請輸入單位" v-model="temProduct.data.unit">
                       </div>
                     </div>
@@ -147,7 +148,7 @@
                     </div>
                     <div class="form-group">
                       <label for="content">說明內容</label>
-                      <textarea id="description" type="text" class="form-control" placeholder="請輸入說明內容" v-model="temProduct.data.content">
+                      <textarea id="content" type="text" class="form-control" placeholder="請輸入說明內容" v-model="temProduct.data.content">
                       </textarea>
                     </div>
                     <div class="form-group">
@@ -161,7 +162,7 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" @click="closeModal">
                   取消
                 </button>
                 <button type="button" class="btn btn-primary" @click="submitData(temProduct.data.id)">
@@ -182,7 +183,7 @@
               </div>
               <div class="modal-body">
                 是否刪除
-                <strong class="text-danger"></strong> 商品(刪除後將無法恢復)。
+                <strong class="text-danger"></strong> {{ temProduct.data.title }}(刪除後將無法恢復)。
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">

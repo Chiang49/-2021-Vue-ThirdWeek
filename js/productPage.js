@@ -43,8 +43,11 @@ const productPage = Vue.createApp({
             axios.get(`${url}api/${path}/admin/products`)
             .then((res) => {
                 // console.log(res);
-                this.products = res.data.products;
-                console.log(this.products);
+                if(res.data.success){
+                    this.products = res.data.products;
+                    // console.log(this.products);
+                    // console.log(this.temProduct.data);
+                }
             })
             .catch((res) => {
                 console.log(res);
@@ -80,7 +83,9 @@ const productPage = Vue.createApp({
                 if(res.data.success){
                     alert("產品新增成功");
                     this.getProductData();
-                    this.temProduct.data = {};
+                    this.temProduct.data = {
+                        imagesUrl: []
+                    };
                     productModal.hide();
                 }else{
                     alert(res.data.message);
@@ -173,6 +178,11 @@ const productPage = Vue.createApp({
                 delProductModal.show();
             }
             
+        },
+
+        //modal取消鍵
+        closeModal(){
+            this.temProduct.data = {};
         }
     },
 
